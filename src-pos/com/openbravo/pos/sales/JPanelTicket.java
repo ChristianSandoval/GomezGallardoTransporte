@@ -1003,6 +1003,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
         JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente.");
                 return false;
         }
+        /*
         if(m_oTicket.getCustomer().getCountry().equals(""))
         {
             JOptionPane.showMessageDialog(this, "El cliente seleccionado no cuenta con un correo configurado.");
@@ -1019,7 +1020,7 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
       JOptionPane.showMessageDialog(this, "El cliente seleccionado no cuenta con un correo válido, favor de verificar.");
             return false;
       }
-  }
+  }*/
         /*String categoria = m_oTicket.getLine(0).getProductCategoryID();
         for(int i=1; i<m_oTicket.getLinesCount();i++)
         {
@@ -1071,7 +1072,10 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                                 MessageInf msg = new MessageInf(MessageInf.SGN_NOTICE, AppLocal.getIntString("message.nosaveticket"), eData);
                                 msg.show(this);
                             }
-
+                            if(paymentdialog.isPrintSelected())
+                            {
+                                printTicket("Printer.Ticket", ticket, ticketext);
+                            }
                             //executeEvent(ticket, ticketext, "ticket.close", new ScriptArg("print", paymentdialog.isPrintSelected()));
 
                     AppConfig config = new AppConfig(new File(System.getProperty("user.home") + File.separator + "openbravopos.properties"));
@@ -1083,14 +1087,13 @@ public abstract class JPanelTicket extends JPanel implements JPanelView, BeanFac
                     props.put("mail.smtp.user", config.getProperty("correoEmisor"));
                     props.put("mail.smtp.password", config.getProperty("claveCorreoEmisor"));
                     props.put("mail.smtp.port", "587");
-                    
+                    String correo = config.getProperty("correoEnvio");
                     Session session = Session.getInstance(props, new GMailAuthenticator(config.getProperty("correoEmisor"), config.getProperty("claveCorreoEmisor")));
                     try {
                         Message message = new MimeMessage(session);
                         message.setFrom(new InternetAddress(config.getProperty("correoEmisor")));
                         message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(m_oTicket.getCustomer().getCountry()));
-                    
+                            InternetAddress.parse(correo));
                         message.setSubject("Sucursal: "+config.getProperty("machine.hostname")+"/Usuario:"+ m_App.getAppUserView().getUser().getName()+"/Ticket:"+ticket.getTicketId());
                         String body = "<html><body>Ticket:"+ticket.getTicketId()+"<br/><br/>";
                         for(int i=0; i<m_oTicket.getLinesCount();i++)
@@ -2364,7 +2367,7 @@ if ((this.m_oTicket.getLinesCount() > 0))
     JTextField observaciones = new JTextField();
     mensajeList.add(observaciones);
     
-    mensajeList.add(new JLabel("Correo: "));
+    mensajeList.add(new JLabel("Cuenta 2%: "));
     JTextField mail = new JTextField();
     mensajeList.add(mail);
     
@@ -2424,7 +2427,7 @@ if ((this.m_oTicket.getLinesCount() > 0))
         JTextField observaciones = new JTextField(temp.getNotes());
         mensajeList.add(observaciones);
         
-        mensajeList.add(new JLabel("Correo: "));
+        mensajeList.add(new JLabel("Cuenta 2%: "));
         JTextField mail = new JTextField(temp.getCountry());
         mensajeList.add(mail);
         

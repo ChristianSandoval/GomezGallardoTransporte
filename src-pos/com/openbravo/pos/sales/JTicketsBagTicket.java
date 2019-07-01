@@ -391,12 +391,13 @@ public class JTicketsBagTicket extends JTicketsBag {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_jEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jEditActionPerformed
-                 
+        if(m_App.getAppUserView().getUser().hasPermission("botoneditar"))
+        {
         m_ticketCopy = m_ticket;        
         m_TicketsBagTicketBag.showEdit();
         m_panelticketedit.showCatalog();
         m_panelticketedit.setActiveTicket(m_ticket.copyTicket(), null);  
-        
+        }
     }//GEN-LAST:event_m_jEditActionPerformed
 
     private void m_jPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_jPrintActionPerformed
